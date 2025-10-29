@@ -1,0 +1,195 @@
+/* Custom CSS for Indian Stock Dashboard */
+
+/* Main theme colors */
+:root {
+    --primary-color: #1abc9c;
+    --secondary-color: #16a085;
+    --background-color: #ffffff;
+    --secondary-bg: #f8f9fa;
+    --text-color: #2c3e50;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Global styles */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+}
+
+/* Main app background with gradient */
+.stApp {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 50%, #e8f8f5 100%);
+}
+
+/* Metric cards styling */
+.stMetric {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stMetric:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Button styling */
+.stButton > button {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.stButton > button:hover {
+    background-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Input fields */
+.stTextInput > div > div > input,
+.stSelectbox > div > div > select {
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    padding: 12px;
+    transition: border-color 0.3s;
+}
+
+.stTextInput > div > div > input:focus,
+.stSelectbox > div > div > select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.1);
+}
+
+/* Sidebar styling */
+.css-1d391kg {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+/* Card containers */
+.element-container {
+    margin-bottom: 1rem;
+}
+
+/* Headers */
+h1, h2, h3 {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+h1 {
+    color: var(--primary-color);
+}
+
+/* Plotly charts */
+.js-plotly-plot {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+/* Expander styling */
+.streamlit-expanderHeader {
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.streamlit-expanderHeader:hover {
+    border-color: var(--primary-color);
+}
+
+/* Tabs styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Success/Error/Warning messages */
+.stSuccess {
+    background-color: #d5f4e6;
+    border-left: 4px solid #27ae60;
+    border-radius: 4px;
+}
+
+.stError {
+    background-color: #ffebee;
+    border-left: 4px solid #e74c3c;
+    border-radius: 4px;
+}
+
+.stWarning {
+    background-color: #fff9e6;
+    border-left: 4px solid #f39c12;
+    border-radius: 4px;
+}
+
+.stInfo {
+    background-color: #e8f8f5;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 4px;
+}
+
+/* Spinner */
+.stSpinner > div {
+    border-top-color: var(--primary-color);
+}
+
+/* Dataframe styling */
+.dataframe {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .stMetric {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+}
