@@ -1,1 +1,0 @@
-# 7-th-sem-Major-project-2
