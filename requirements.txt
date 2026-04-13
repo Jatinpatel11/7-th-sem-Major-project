@@ -5,7 +5,7 @@ numpy
 tensorflow
 plotly
 vaderSentiment
-pandas-ta
+ta
 bcrypt
 scikit-learn
 requests
