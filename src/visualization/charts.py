@@ -245,6 +245,7 @@ def create_technical_indicator_chart(indicator_name: str, data: pd.DataFrame,
             yaxis_title='RSI',
             yaxis_range=[0, 100]
         )
+        return fig
   
     elif indicator_name == 'MACD':
          # Ensure enough data
