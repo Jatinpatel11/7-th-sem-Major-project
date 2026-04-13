@@ -195,7 +195,7 @@ def create_prediction_chart(prediction_data: Dict) -> go.Figure:
     
     return fig
 
-
+from ta.trend import MACD
 def create_technical_indicator_chart(indicator_name: str, data: pd.DataFrame, 
                                      indicator_data: Dict) -> go.Figure:
     """Create chart for technical indicators (RSI, MACD).
@@ -245,74 +245,48 @@ def create_technical_indicator_chart(indicator_name: str, data: pd.DataFrame,
             yaxis_title='RSI',
             yaxis_range=[0, 100]
         )
+  
     elif indicator_name == 'MACD':
+         # Ensure enough data
+        if len(data) < 26:
+            fig.update_layout(
+                title='MACD (Not enough data)',
+                template='plotly_white'
+            )
+            return fig
 
-       # Import correct library (ONLY ta, not pandas_ta)
-       from ta.trend import MACD
-       
-       if len(data) < 26:
-          fig.update_layout(
-             title='MACD (Not enough data)',
-             template='plotly_white'
-        )
-        return fig
+        # Calculate MACD
+        macd_indicator = MACD(close=data['Close'])
 
-       # Calculate MACD
-       macd_indicator = MACD(close=data['Close'])
+        macd_line = macd_indicator.macd()
+        signal_line = macd_indicator.macd_signal()
+        histogram = macd_indicator.macd_diff()
 
-       macd_line = macd_indicator.macd()
-       signal_line = macd_indicator.macd_signal()
-       histogram = macd_indicator.macd_diff()
+        fig.add_trace(go.Scatter(
+            x=data.index,
+            y=macd_line,
+            name='MACD'
+        ))
 
-       # Safety check
-       if macd_line is None or signal_line is None or histogram is None:
+        fig.add_trace(go.Scatter(
+            x=data.index,
+            y=signal_line,
+            name='Signal'
+        ))
+
+        fig.add_trace(go.Bar(
+            x=data.index,
+            y=histogram,
+            name='Histogram'
+        ))
+
         fig.update_layout(
-            title='MACD (Data unavailable)',
+            title='MACD (Moving Average Convergence Divergence)',
             template='plotly_white'
         )
-        return fig
-
-       # MACD Line
-       fig.add_trace(go.Scatter(
-        x=data.index,
-        y=macd_line,
-        name='MACD',
-        line=dict(color=COLORS['primary'], width=2)
-        ))
-
-       # Signal Line
-       fig.add_trace(go.Scatter(
-        x=data.index,
-        y=signal_line,
-        name='Signal',
-        line=dict(color=COLORS['secondary'], width=2)
-         ))
-
-       # Histogram
-       fig.add_trace(go.Bar(
-        x=data.index,
-        y=histogram,
-        name='Histogram',
-        marker_color=COLORS['neutral']
-        ))
-
-        # Layout
-        fig.update_layout(
-        title='MACD (Moving Average Convergence Divergence)',
-        yaxis_title='MACD',
-        xaxis_title='Date',
-        template='plotly_white',
-        hovermode='x unified',
-        height=300,
-        font=dict(family="Inter, sans-serif", color=COLORS['text']),
-        plot_bgcolor=COLORS['background'],
-        paper_bgcolor='white'
-        )
 
         return fig
-
     
-
 def create_volume_chart(data: pd.DataFrame) -> go.Figure:
     """Create volume chart.
     
