@@ -2,10 +2,11 @@
 Technical indicators service for stock analysis.
 """
 import pandas as pd
-import pandas_ta as ta
 import streamlit as st
 from typing import Dict
 import numpy as np
+from ta.momentum import RSIIndicator
+from ta.trend import MACD
 
 
 @st.cache_data(ttl=3600)  # Cache for 1 hour
@@ -36,62 +37,44 @@ def calculate_moving_averages(data: pd.DataFrame, periods: list = [20, 50, 200])
 
 @st.cache_data(ttl=3600)
 def calculate_rsi(data: pd.DataFrame, period: int = 14) -> Dict:
-    """Calculate Relative Strength Index (RSI).
-    
-    Args:
-        data: DataFrame with stock data
-        period: RSI period (default: 14)
-    
-    Returns:
-        Dictionary with RSI values
-    """
     try:
         if len(data) < period:
             return {"current": None, "overbought": 70, "oversold": 30}
-        
-        rsi = ta.rsi(data['Close'], length=period)
-        current_rsi = rsi.iloc[-1]
-        
+
+        rsi_indicator = RSIIndicator(close=data['Close'], window=period)
+        rsi_series = rsi_indicator.rsi()
+        current_rsi = rsi_series.iloc[-1]
+
         return {
             "current": round(current_rsi, 2),
             "overbought": 70,
             "oversold": 30,
             "signal": "Overbought" if current_rsi > 70 else "Oversold" if current_rsi < 30 else "Neutral"
         }
+
     except Exception as e:
         print(f"Error calculating RSI: {e}")
         return {"current": None, "overbought": 70, "oversold": 30, "signal": "N/A"}
 
-
 @st.cache_data(ttl=3600)
 def calculate_macd(data: pd.DataFrame) -> Dict:
-    """Calculate MACD (Moving Average Convergence Divergence).
-    
-    Args:
-        data: DataFrame with stock data
-    
-    Returns:
-        Dictionary with MACD values
-    """
     try:
         if len(data) < 26:
             return {"macd": None, "signal": None, "histogram": None}
-        
-        macd_data = ta.macd(data['Close'])
-        
-        if macd_data is None or macd_data.empty:
-            return {"macd": None, "signal": None, "histogram": None}
-        
-        macd_line = macd_data[f'MACD_12_26_9'].iloc[-1]
-        signal_line = macd_data[f'MACDs_12_26_9'].iloc[-1]
-        histogram = macd_data[f'MACDh_12_26_9'].iloc[-1]
-        
+
+        macd_indicator = MACD(close=data['Close'])
+
+        macd_line = macd_indicator.macd().iloc[-1]
+        signal_line = macd_indicator.macd_signal().iloc[-1]
+        histogram = macd_indicator.macd_diff().iloc[-1]
+
         return {
             "macd": round(macd_line, 2),
             "signal": round(signal_line, 2),
             "histogram": round(histogram, 2),
             "trend": "Bullish" if histogram > 0 else "Bearish"
         }
+
     except Exception as e:
         print(f"Error calculating MACD: {e}")
         return {"macd": None, "signal": None, "histogram": None, "trend": "N/A"}
