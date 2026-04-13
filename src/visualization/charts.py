@@ -212,27 +212,30 @@ def create_technical_indicator_chart(indicator_name: str, data: pd.DataFrame,
     
     if indicator_name == 'RSI':
         # Calculate RSI series
-        import pandas_ta as ta
-        rsi_series = ta.rsi(data['Close'], length=14)
+       from ta.momentum import RSIIndicator
+       rsi_series = RSIIndicator(
+                close=data['Close'],
+                window=14
+                ).rsi()
         
         fig.add_trace(go.Scatter(
-            x=data.index,
-            y=rsi_series,
-            name='RSI',
-            line=dict(color=COLORS['primary'], width=2)
-        ))
-        
-        # Add overbought/oversold lines
-        fig.add_hline(y=70, line_dash="dash", line_color=COLORS['negative'], 
-                     annotation_text="Overbought")
-        fig.add_hline(y=30, line_dash="dash", line_color=COLORS['positive'], 
-                     annotation_text="Oversold")
-        
-        fig.update_layout(
-            title='Relative Strength Index (RSI)',
-            yaxis_title='RSI',
-            yaxis_range=[0, 100]
-        )
+        x=data.index,
+        y=rsi_series,
+        name='RSI',
+        line=dict(color=COLORS['primary'], width=2)
+    ))
+
+    fig.add_hline(y=70, line_dash="dash", line_color=COLORS['negative'], 
+                 annotation_text="Overbought")
+
+    fig.add_hline(y=30, line_dash="dash", line_color=COLORS['positive'], 
+                 annotation_text="Oversold")
+
+    fig.update_layout(
+        title='Relative Strength Index (RSI)',
+        yaxis_title='RSI',
+        yaxis_range=[0, 100]
+    )
     
     elif indicator_name == 'MACD':
         # Calculate MACD series
